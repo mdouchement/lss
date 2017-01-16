@@ -6,21 +6,22 @@ import (
 	"path/filepath"
 
 	"github.com/labstack/echo"
-	. "github.com/mdouchement/lss/config"
+	"github.com/mdouchement/lss/config"
 	"github.com/mdouchement/lss/errors"
 )
 
+// Upload stores the file to the given path.
 func Upload(c echo.Context) error {
 	c.Set("handler_method", "Upload")
 
-	path := filepath.Join(Cfg.Workspace, c.Param("*"))
-	if !Engine.IsPathValid(path) {
+	path := filepath.Join(config.Cfg.Workspace, c.Param("*"))
+	if !config.Engine.IsPathValid(path) {
 		return errors.NewControllersError("invalid_path", errors.M{
 			"path": path,
 		})
 	}
 
-	Engine.MkdirAllWithFilename(path)
+	config.Engine.MkdirAllWithFilename(path)
 
 	// Source
 	file, err := c.FormFile("file")
@@ -33,7 +34,7 @@ func Upload(c echo.Context) error {
 	}
 	defer src.Close()
 
-	w, err := Engine.Writer(path)
+	w, err := config.Engine.Writer(path)
 	if err != nil {
 		return err // err should be already well formatted
 	}

@@ -8,9 +8,10 @@ import (
 	"github.com/caarlos0/env"
 )
 
+// Cfg variable holds all LSS configuration.
 var Cfg *Config
 
-// Config holds all configuration for our program
+// Config holds all configuration for our program.
 type Config struct {
 	Version string `env:"APP_VERSION"`
 

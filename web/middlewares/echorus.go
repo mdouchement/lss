@@ -20,10 +20,12 @@ var (
 	reset   = string([]byte{27, 91, 48, 109})
 )
 
+// DefaultEchorus returns the default logger middleware for Echo server.
 func DefaultEchorus() echo.MiddlewareFunc {
 	return Echorus(config.Log)
 }
 
+// Echorus returns the logger middleware for Echo server.
 func Echorus(logger *logrus.Logger) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
@@ -52,7 +54,7 @@ func Echorus(logger *logrus.Logger) echo.MiddlewareFunc {
 				keys[pname] = c.Param(pname)
 			}
 			queries := c.QueryParams()
-			for qname, _ := range queries {
+			for qname := range queries {
 				keys[qname] = queries.Get(qname)
 			}
 

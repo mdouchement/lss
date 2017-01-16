@@ -10,15 +10,18 @@ import (
 )
 
 // An OS structure delegates Engine's methods on Golang os package.
+// It implements the Engine interface.
 type OS struct {
 	Workspace string
 }
 
+// IsPathValid implements the Engine interface.
 func (o *OS) IsPathValid(path string) bool {
 	cPath := filepath.Clean(path)
 	return strings.HasPrefix(cPath, o.Workspace)
 }
 
+// Exist implements the Engine interface.
 func (o *OS) Exist(path string) bool {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -30,6 +33,7 @@ func (o *OS) Exist(path string) bool {
 	return true // ignoring error
 }
 
+// Metadata implements the Engine interface.
 func (o *OS) Metadata(path string) M {
 	m := M{}
 	f, err := os.Stat(path)
@@ -46,6 +50,7 @@ func (o *OS) Metadata(path string) M {
 	return m
 }
 
+// Reader implements the Engine interface.
 func (o *OS) Reader(path string) (io.ReadCloser, error) {
 	rc, err := os.Open(path)
 	if err != nil {
@@ -56,6 +61,7 @@ func (o *OS) Reader(path string) (io.ReadCloser, error) {
 	return rc, err
 }
 
+// Writer implements the Engine interface.
 func (o *OS) Writer(path string) (io.WriteCloser, error) {
 	wc, err := os.Create(path)
 	if err != nil {
@@ -66,6 +72,7 @@ func (o *OS) Writer(path string) (io.WriteCloser, error) {
 	return wc, err
 }
 
+// ListFiles implements the Engine interface.
 func (o *OS) ListFiles(path string) M {
 	m := M{}
 	err := filepath.Walk(path, func(p string, f os.FileInfo, err error) error {
@@ -87,16 +94,19 @@ func (o *OS) ListFiles(path string) M {
 	return m
 }
 
+// MkdirAllWithFilename implements the Engine interface.
 func (o *OS) MkdirAllWithFilename(path string) {
 	o.MkdirAll(filepath.Dir(path))
 }
 
+// MkdirAll implements the Engine interface.
 func (o *OS) MkdirAll(path string) {
 	if !o.Exist(path) {
 		os.MkdirAll(path, 0755)
 	}
 }
 
+// Remove implements the Engine interface.
 func (o *OS) Remove(path string) error {
 	err := os.RemoveAll(path)
 	if err != nil {

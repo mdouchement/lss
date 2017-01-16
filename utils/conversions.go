@@ -47,7 +47,7 @@ func MustBeMapStringInterface(value interface{}) map[string]interface{} {
 	return v
 }
 
-// MustBeMapStringInterface converts the given value to a []map[string]interface{}.
+// MustBeSliceOfMapStringInterface converts the given value to a []map[string]interface{}.
 // It panics if the conversion fails.
 func MustBeSliceOfMapStringInterface(value interface{}) []map[string]interface{} {
 	elts, ok := value.([]interface{})

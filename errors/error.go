@@ -18,7 +18,7 @@ type HTTPCoder interface {
 // M is metadata structure
 type M map[string]interface{}
 
-// Error describe all errors occured when a license is asked.
+// Error describe all errors occurred when a license is asked.
 type Error struct {
 	Status     int          `json:"status"`
 	StatusText string       `json:"status_text"`
