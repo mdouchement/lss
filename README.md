@@ -3,6 +3,7 @@
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/mdouchement/lss)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mdouchement/lss)](https://goreportcard.com/report/github.com/mdouchement/lss)
 [![License](https://img.shields.io/github/license/mdouchement/lss.svg)](http://opensource.org/licenses/MIT)
+[![Docker Automated build](https://img.shields.io/docker/automated/mdouchement/lss.svg)](https://hub.docker.com/r/mdouchement/lss/)
 
 LSS is a simple web storage API.
 
@@ -114,6 +115,12 @@ $ find . -name '*.go' -not -path './vendor*' -exec go fmt {} \;
 ```bash
 $ go build -o lss lss.go
 $ ./lss -p 4005 -w /data
+```
+
+- Docker
+
+```bash
+$ docker run -p 8888:8080 -v /my_data:/data -d mdouchement/lss
 ```
 
 ## License
