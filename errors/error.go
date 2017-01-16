@@ -25,8 +25,10 @@ type Error struct {
 	Errors     []InnerError `json:"errors"`
 }
 
+// InnerErrors holds all errors raised during a request.
 type InnerErrors []InnerError
 
+// InnerError details an error occurred during a request.
 type InnerError struct {
 	Code     string `json:"code"`
 	Kind     string `json:"type"`
@@ -62,6 +64,7 @@ var codeList = map[string]map[string]string{
 	},
 }
 
+// StatusCode returns the HTTP status code from the given err.
 func StatusCode(err error) int {
 	if hc, ok := err.(HTTPCoder); ok {
 		return hc.HTTPCode()
@@ -69,11 +72,12 @@ func StatusCode(err error) int {
 	return http.StatusInternalServerError
 }
 
+// Error returns a well formated string of the current error.
 func (e *InnerError) Error() string {
 	return fmt.Sprintf("%s-%s: %s", e.Kind, e.Code, e.Metadata["reason"])
 }
 
-// Error contacts all InnerError in a single string.
+// Error concats all InnerError in a single string.
 func (e *Error) Error() string {
 	var errf bytes.Buffer
 	errf.WriteString("[")
@@ -89,6 +93,7 @@ func (e *Error) Error() string {
 	return errf.String()
 }
 
+// HTTPCode returns the HHTP status code of the current error.
 func (e *Error) HTTPCode() int {
 	return e.Status
 }
