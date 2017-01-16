@@ -1,0 +1,42 @@
+package: github.com/mdouchement/lss
+import:
+# Unclassified
+- package: gopkg.in/yaml.v2
+  version: a83829b6f1293c91addabc89d0571c246397bbf4
+- package: gopkg.in/urfave/cli.v2
+  version: ee2e8aa5b22f55f006c27fd35765c62249a39aad
+- package: github.com/caarlos0/env
+  version: 2.0.0
+- package: github.com/satori/go.uuid
+  version: 0aa62d5ddceb50dbcb909d790b5345affd3669b6
+# Web framework
+- package: github.com/labstack/echo
+  version: v3.0.3
+- package: github.com/labstack/gommon
+  version: 9a43ff0d261e0e65594422e9eee08cf301aabbe7
+  subpackages:
+  - bytes
+  - color
+  - log
+  - random
+- package: github.com/rsc/letsencrypt
+  version: 76104d26167d38b6a0010f42bfc8ec5487742e8b
+- package: github.com/tylerb/graceful
+  version: 50a48b6e73fcc75b45e22c05b79629a67c79e938
+- package: github.com/dgrijalva/jwt-go
+  version: 24c63f56522a87ec5339cc3567883f1039378fdb
+# Logging
+- package: github.com/Sirupsen/logrus
+  version: 0.10.0
+- package: github.com/x-cray/logrus-prefixed-formatter
+  version: 78e945f7d6bfe5a81ce6121d92d8118e44303e58
+- package: github.com/mgutz/ansi
+  version: c286dcecd19ff979eeb73ea444e479b903f2cfcb
+- package: github.com/mattn/go-colorable
+  version: 9056b7a9f2d1f2d96498d6d146acd1f9d5ed3d59
+- package: github.com/mattn/go-isatty
+  version: 56b76bdf51f7708750eac80fa38b952bb9f32639
+- package: golang.org/x/sys
+  version: a646d33e2ee3172a661fc09bca23bb4889a41bc8
+  subpackages:
+  - unix
