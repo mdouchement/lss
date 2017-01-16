@@ -12,6 +12,7 @@ import (
 )
 
 var (
+	// ServerCommand defines the server command (CLI).
 	ServerCommand = &cli.Command{
 		Name:    "server",
 		Aliases: []string{"s"},
@@ -65,6 +66,7 @@ func serverAction(context *cli.Context) error {
 	return nil
 }
 
+// EchoEngine instanciates the LSS server.
 func EchoEngine() *echo.Echo {
 	engine := echo.New()
 	engine.Use(middleware.Recover())
@@ -74,7 +76,7 @@ func EchoEngine() *echo.Echo {
 
 	router := engine.Group(config.Cfg.RouterNamespace)
 
-	router.GET("/version", controllers.ShowVersion)
+	router.GET("/version", controllers.Version)
 	router.HEAD("/*", controllers.Exist)
 	router.GET("/*", func(c echo.Context) error {
 		if _, ok := c.QueryParams()["list"]; ok {

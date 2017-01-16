@@ -1,5 +1,9 @@
 # Light Storage Service
 
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/mdouchement/lss)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mdouchement/lss)](https://goreportcard.com/report/github.com/mdouchement/lss)
+[![License](https://img.shields.io/github/license/mdouchement/lss.svg)](http://opensource.org/licenses/MIT)
+
 LSS is a simple web storage API.
 
 ## Requirements

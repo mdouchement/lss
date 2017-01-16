@@ -5,6 +5,7 @@ import "io"
 // M is a metadata structure.
 type M map[string]interface{}
 
+// Engine is the interface that wraps the basic FileSytem operations.
 type Engine interface {
 	// IsPathValid validates that the given path is in the workspace.
 	IsPathValid(path string) bool
