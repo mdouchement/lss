@@ -41,7 +41,8 @@ func Upload(c echo.Context) error {
 	defer w.Close()
 
 	// Copy
-	if _, err = io.Copy(w, src); err != nil {
+	buf := make([]byte, 32768) // 32KB
+	if _, err = io.CopyBuffer(w, src, buf); err != nil {
 		return errors.NewControllersError("copy", errors.M{
 			"reason": err.Error(),
 		})

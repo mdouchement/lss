@@ -96,7 +96,7 @@ Lorem ipsum dolor sit amet
 
 Environment variables:
 - `LSS_WORKSPACE` (default: `./workspace`)
-- `LSS_UPLOAD_SIZE_LIMIT` (default: `8192` MiB)
+- `LSS_UPLOAD_SIZE_LIMIT` (default: `8G`)
 - `LSS_ROUTER_NAMESPACE` (default: `""` ; e.g. `/lss`)
 
 ### Development

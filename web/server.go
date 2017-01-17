@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -46,20 +47,20 @@ var (
 )
 
 func serverAction(context *cli.Context) error {
+	if w := context.String("w"); w != "" {
+		config.Cfg.Workspace = filepath.Clean(w)
+	}
+	if n := context.String("n"); n != "" {
+		config.Cfg.RouterNamespace = n
+	}
+	if size := context.String("s"); size != "" {
+		config.Cfg.UploadSizeLimit = size
+	}
 	engine := EchoEngine()
 	printRoutes(engine)
 
-	if w := context.String("workspace"); w != "" {
-		config.Cfg.Workspace = w
-	}
-	if n := context.String("namespace"); n != "" {
-		config.Cfg.RouterNamespace = n
-	}
-	if size := context.String("size"); size != "" {
-		config.Cfg.UploadSizeLimit = size
-	}
-
 	listen := fmt.Sprintf("%s:%s", context.String("b"), context.String("p"))
+	config.Log.Infof("Upload limit: %s", config.Cfg.UploadSizeLimit)
 	config.Log.Infof("Server listening on %s", listen)
 	engine.Start(listen)
 
