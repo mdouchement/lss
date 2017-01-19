@@ -8,6 +8,7 @@ import (
 // HTTPErrorHandler is a middleware that formats rendered errors.
 func HTTPErrorHandler(err error, c echo.Context) {
 	if !c.Response().Committed {
+		c.Set("error", err.Error())
 		if c.Request().Method == echo.HEAD {
 			c.NoContent(errors.StatusCode(err))
 		} else {

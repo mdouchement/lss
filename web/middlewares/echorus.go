@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/Sirupsen/logrus"
@@ -48,6 +49,9 @@ func Echorus(logger *logrus.Logger) echo.MiddlewareFunc {
 			statusColor := colorForStatus(statusCode)
 			methodColor := colorForMethod(method)
 			comment := ""
+			if e := c.Get("error"); e != nil {
+				comment = fmt.Sprintf("error: %s", e)
+			}
 
 			keys := make(map[string]interface{}, len(c.ParamNames()))
 			for _, pname := range c.ParamNames() {
