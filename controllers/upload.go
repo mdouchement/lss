@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"path/filepath"
@@ -23,30 +24,57 @@ func Upload(c echo.Context) error {
 
 	config.Engine.MkdirAllWithFilename(path)
 
-	// Source
-	file, err := c.FormFile("file")
-	if err != nil {
-		return err
-	}
-	src, err := file.Open()
-	if err != nil {
-		return err
-	}
-	defer src.Close()
-
 	w, err := config.Engine.Writer(path)
 	if err != nil {
 		return err // err should be already well formatted
 	}
 	defer w.Close()
 
-	// Copy
-	buf := make([]byte, 32768) // 32KB
-	if _, err = io.CopyBuffer(w, src, buf); err != nil {
+	// Stream to destination
+	if err = streamParts(w, c.Request(), path); err != nil {
 		return errors.NewControllersError("copy", errors.M{
 			"reason": err.Error(),
 		})
 	}
 
 	return c.NoContent(http.StatusOK)
+}
+
+func streamParts(w io.Writer, req *http.Request, path string) error {
+	mr, err := req.MultipartReader()
+	if err != nil {
+		return err
+	}
+
+	found := false
+	for {
+		p, err := mr.NextPart()
+		if err == io.EOF {
+			if !found {
+				return fmt.Errorf("http multipart: no such file")
+			}
+			return nil
+		}
+		if err != nil {
+			badUploadHandler(req, path)
+			return err
+		}
+
+		if p.FormName() == "file" {
+			// Copy/Download
+			if _, err = io.Copy(w, p); err != nil {
+				badUploadHandler(req, path)
+				return err
+			}
+			found = true
+		}
+	}
+}
+
+func badUploadHandler(req *http.Request, path string) {
+	actual := config.Engine.Metadata(path)["size"]
+	expected := req.Header.Get("Content-Length")
+	if fmt.Sprintf("%s", actual) != fmt.Sprintf("%s", expected) {
+		config.Engine.Remove(path)
+	}
 }
