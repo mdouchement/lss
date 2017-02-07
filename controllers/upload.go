@@ -72,9 +72,5 @@ func streamParts(w io.Writer, req *http.Request, path string) error {
 }
 
 func badUploadHandler(req *http.Request, path string) {
-	actual := config.Engine.Metadata(path)["size"]
-	expected := req.Header.Get("Content-Length")
-	if fmt.Sprintf("%s", actual) != fmt.Sprintf("%s", expected) {
-		config.Engine.Remove(path)
-	}
+	config.Engine.Remove(path)
 }
