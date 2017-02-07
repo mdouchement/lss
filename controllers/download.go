@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"path/filepath"
 
@@ -30,5 +31,8 @@ func Download(c echo.Context) error {
 	}
 	defer r.Close()
 
-	return c.Stream(http.StatusOK, filepath.Base(path), r)
+	c.Response().Header().
+		Set(echo.HeaderContentLength, fmt.Sprintf("%d", config.Engine.Metadata(path)["size"]))
+
+	return c.Stream(http.StatusOK, echo.MIMEOctetStream, r)
 }
