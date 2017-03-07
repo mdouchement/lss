@@ -1,6 +1,7 @@
 package engines
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -73,13 +74,26 @@ func (o *OS) Writer(path string) (io.WriteCloser, error) {
 }
 
 // ListFiles implements the Engine interface.
-func (o *OS) ListFiles(path string) M {
+func (o *OS) ListFiles(path string, depth int) M {
 	m := M{}
+	fmt.Println(path)
 	err := filepath.Walk(path, func(p string, f os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-		m[strings.Replace(p, o.Workspace, "", -1)] = M{
+
+		if depth > 0 && o.pathDepth(path, p) > depth {
+			return nil
+		}
+
+		relativePath := ""
+		if p == o.Workspace {
+			relativePath = "/"
+		} else {
+			relativePath = strings.Replace(p, o.Workspace, "", -1)
+		}
+
+		m[relativePath] = M{
 			"size":       f.Size(),
 			"directory":  f.IsDir(),
 			"updated_at": f.ModTime(),
@@ -115,4 +129,9 @@ func (o *OS) Remove(path string) error {
 		})
 	}
 	return nil
+}
+
+func (o *OS) pathDepth(base, path string) int {
+	rp := strings.Replace(path, base, "", -1)
+	return len(strings.Split(rp, "/")) - 1
 }
