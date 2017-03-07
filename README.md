@@ -52,6 +52,30 @@ GET /my_directory?list
     "directory": false,
     "size": 764,
     "updated_at": "2017-01-16T09:55:36+01:00"
+  },
+  "/my_directory/depth/file.txt": {
+    "directory": false,
+    "size": 764,
+    "updated_at": "2017-01-16T09:55:36+01:00"
+  }
+}
+```
+
+```
+GET /my_directory?list&depth=1
+```
+
+```json
+{
+  "/my_directory": {
+    "directory": true,
+    "size": 102,
+    "updated_at": "2017-01-16T09:55:36+01:00"
+  },
+  "/my_directory/file.txt": {
+    "directory": false,
+    "size": 764,
+    "updated_at": "2017-01-16T09:55:36+01:00"
   }
 }
 ```
@@ -104,7 +128,10 @@ Environment variables:
 ```bash
 $ go run lss.go -h
 
-$ go run lss.go server -p 4005
+$ go run lss.go server -b localhost -p 5000
+
+# Or with live-reload
+$ make live-reload # needs fswatch tool
 
 # Before pushing to Github
 $ find . -name '*.go' -not -path './vendor*' -exec go fmt {} \;

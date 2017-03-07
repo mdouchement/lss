@@ -62,6 +62,12 @@ var codeList = map[string]map[string]string{
 		"status_text": "Unprocessable Entity",
 		"reason":      "Path `{{.path}}` is not valid.",
 	},
+	"controllers-invalid_query": {
+		"code":        "422-001",
+		"status":      "422",
+		"status_text": "Unprocessable Entity",
+		"reason":      "Query `{{.query}}` is not valid.",
+	},
 }
 
 // StatusCode returns the HTTP status code from the given err.

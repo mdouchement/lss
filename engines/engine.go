@@ -20,8 +20,9 @@ type Engine interface {
 	Writer(path string) (io.WriteCloser, error)
 
 	// ListFiles lists all files for a given path.
-	// It returns pathes relative to the workspace.
-	ListFiles(path string) M
+	// It returns paths relative to the workspace.
+	// The depth option is ignored when it equals 0.
+	ListFiles(path string, depth int) M
 	// MkdirAll creates the given directory and its parents.
 	MkdirAll(path string)
 	// MkdirAllWithFilename creates all parent directories of the given filepath.

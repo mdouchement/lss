@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"path/filepath"
+	"strconv"
 
 	"github.com/labstack/echo"
 	"github.com/mdouchement/lss/config"
@@ -24,5 +25,16 @@ func ListFiles(c echo.Context) error {
 		return c.NoContent(http.StatusNotFound)
 	}
 
-	return c.JSON(http.StatusOK, config.Engine.ListFiles(path))
+	var depth int
+	if d, ok := c.QueryParams()["depth"]; ok {
+		v, err := strconv.Atoi(d[0])
+		if err != nil {
+			return errors.NewControllersError("invalid_query", errors.M{
+				"query": "depth",
+			})
+		}
+		depth = v
+	}
+
+	return c.JSON(http.StatusOK, config.Engine.ListFiles(path, depth))
 }
