@@ -23,11 +23,16 @@ var (
 
 // DefaultEchorus returns the default logger middleware for Echo server.
 func DefaultEchorus() echo.MiddlewareFunc {
-	return Echorus(config.Log)
+	return Echorus(config.Log, true)
+}
+
+// ProductionEchorus returns the production logger middleware for Echo server.
+func ProductionEchorus() echo.MiddlewareFunc {
+	return Echorus(config.Log, false)
 }
 
 // Echorus returns the logger middleware for Echo server.
-func Echorus(logger *logrus.Logger) echo.MiddlewareFunc {
+func Echorus(logger *logrus.Logger, color bool) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) (err error) {
 			start := time.Now()
@@ -70,15 +75,27 @@ func Echorus(logger *logrus.Logger) echo.MiddlewareFunc {
 				params = []byte{}
 			}
 
-			logger.Infof("[Echo] %-10s|%s %3d %s| %13v | %s |%s  %s %-7s %s %s %s",
-				handleMmethod, statusColor, statusCode, reset,
-				latency,
-				clientIP,
-				methodColor, reset, method,
-				path,
-				params,
-				comment,
-			)
+			if color {
+				logger.Infof("[Echo] %-10s|%s %3d %s| %13v | %s |%s  %s %-7s %s %s %s",
+					handleMmethod, statusColor, statusCode, reset,
+					latency,
+					clientIP,
+					methodColor, reset, method,
+					path,
+					params,
+					comment,
+				)
+			} else {
+				logger.Infof("[Echo] %-10s| %3d | %13v | %s | %-7s %s %s %s",
+					handleMmethod, statusCode,
+					latency,
+					clientIP,
+					method,
+					path,
+					params,
+					comment,
+				)
+			}
 			return
 		}
 	}

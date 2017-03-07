@@ -72,7 +72,11 @@ func EchoEngine() *echo.Echo {
 	engine := echo.New()
 	engine.Use(middleware.Recover())
 	engine.Use(middleware.BodyLimit(config.Cfg.UploadSizeLimit))
-	engine.Use(middlewares.DefaultEchorus())
+	if config.Env() == config.Production {
+		engine.Use(middlewares.ProductionEchorus())
+	} else {
+		engine.Use(middlewares.DefaultEchorus())
+	}
 	engine.HTTPErrorHandler = middlewares.HTTPErrorHandler
 
 	router := engine.Group(config.Cfg.RouterNamespace)
